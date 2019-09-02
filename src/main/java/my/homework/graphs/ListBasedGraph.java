@@ -1,4 +1,4 @@
-package my.homework.graphs.common;
+package my.homework.graphs;
 
 import java.util.*;
 
@@ -41,22 +41,25 @@ public class ListBasedGraph<T> {
      */
 
 
-    public List<Vertex<T>> getPath(Vertex<T> oneVertex, Vertex<T> nextOneVertex) {
+    public List<Vertex<T>> getPath(Vertex<T> oneVertex, Vertex<T> nextOneVertex) throws IllegalGraphArgumentException {
         List<Edge<T>> resultList = new ArrayList<>();
-        List<Vertex<T>> visited = new LinkedList<>();
-        List<Vertex<T>> toBeProcessed = new ArrayList<>();
+        LinkedList<Vertex<T>> visited = new LinkedList<>();
+        Queue<Vertex<T>> toBeProcessed = new LinkedList<>();
         visited.add(oneVertex);
         toBeProcessed.add(oneVertex);
 
+        checkInputArgument(oneVertex);
+        checkInputArgument(nextOneVertex);
+
         while (!toBeProcessed.isEmpty()) {
-            Vertex<T> vtx = toBeProcessed.get(0);
+            Vertex<T> vtx = toBeProcessed.poll();
             for (Vertex<T> v : getJoinedVertex(vtx)) {
-                if(v.equals(nextOneVertex))
-                    return visited;
-                if(!visited.contains(v)){
+                if (!visited.contains(v)) {
                     visited.add(v);
                     toBeProcessed.add(v);
                 }
+                if (v.equals(nextOneVertex))
+                    return visited;
             }
         }
         return new ArrayList<>();
@@ -67,4 +70,10 @@ public class ListBasedGraph<T> {
         return adjVertices.putIfAbsent(oneVertex, new ArrayList<>());
     }
 
+    private void checkInputArgument(Vertex<T> input) throws IllegalGraphArgumentException {
+
+        if (adjVertices.get(input).isEmpty()) {
+            throw new IllegalGraphArgumentException();
+        }
+    }
 }

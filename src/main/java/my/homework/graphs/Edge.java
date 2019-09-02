@@ -1,4 +1,6 @@
-package my.homework.graphs.common;
+package my.homework.graphs;
+
+import my.homework.graphs.Vertex;
 
 public class Edge<T> {
 

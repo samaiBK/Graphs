@@ -1,4 +1,4 @@
-package my.homework.graphs.common;
+package my.homework.graphs;
 
 import java.util.Objects;
 
@@ -24,7 +24,7 @@ public class Vertex<T> {
 
     @Override
     public String toString() {
-        return "my.homework.graphs.common.Vertex{" +
+        return "my.homework.graphs.Vertex{" +
                 "label='" + value + '\'' +
                 '}';
     }
