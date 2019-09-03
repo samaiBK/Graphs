@@ -1,37 +1,33 @@
 package my.homework.graphs;
 
+import my.homework.graphs.api.Graph;
+
 import java.util.*;
 
-public class ListBasedGraph<T> {
+public class ListBasedGraph<T> implements Graph<T> {
 
-    private Map<Vertex<?>, List<Vertex<T>>> adjVertices = new HashMap<>();
+    private final Map<Vertex<T>, List<Vertex<T>>> vertices = new HashMap<>();
 
-
-    public void addVertex(T val) {
-        addVertex(new Vertex<>(val));
+    /**
+     * Appends the specified Vertex to this graph.
+     *
+     * @param v - vertex for appends
+     */
+    @Override
+    public void addVertex(Vertex<T> v) {
+        vertices.putIfAbsent(v, new ArrayList<>());
     }
 
-
-    public void addVertex(Vertex<T> vertex) {
-        adjVertices.putIfAbsent(vertex, new ArrayList<>());
-    }
-
-
-    public void addEdge(T label1, T label2) {
-        Vertex<T> v1 = new Vertex<>(label1);
-        Vertex<T> v2 = new Vertex<>(label2);
-        addEdge(v1, v2);
-    }
-
-
-    public void addEdge(Edge<T> edge) {
-        addEdge(edge.getNextVertex(), edge.getNextVertex());
-    }
-
-
+    /**
+     * Appends the specified Edge to this graph.
+     *
+     * @param v1 - one point of an edge
+     * @param v2 - next one point of an edge
+     */
+    @Override
     public void addEdge(Vertex<T> v1, Vertex<T> v2) {
-        adjVertices.get(v1).add(v2);
-        adjVertices.get(v2).add(v1);
+        vertices.get(v1).add(v2);
+        vertices.get(v2).add(v1);
     }
 
     /**
@@ -39,10 +35,8 @@ public class ListBasedGraph<T> {
      * @param nextOneVertex - another vertex
      * @return returns a list of edges between 2 vertices (path doesn’t have to be optimal)
      */
-
-
-    public List<Vertex<T>> getPath(Vertex<T> oneVertex, Vertex<T> nextOneVertex) throws IllegalGraphArgumentException {
-        List<Edge<T>> resultList = new ArrayList<>();
+    @Override
+    public List<Vertex<T>> getPath(Vertex<T> oneVertex, Vertex<T> nextOneVertex) {
         LinkedList<Vertex<T>> visited = new LinkedList<>();
         Queue<Vertex<T>> toBeProcessed = new LinkedList<>();
         visited.add(oneVertex);
@@ -53,7 +47,7 @@ public class ListBasedGraph<T> {
 
         while (!toBeProcessed.isEmpty()) {
             Vertex<T> vtx = toBeProcessed.poll();
-            for (Vertex<T> v : getJoinedVertex(vtx)) {
+            for (Vertex<T>  v : getJoinedVertex(vtx)) {
                 if (!visited.contains(v)) {
                     visited.add(v);
                     toBeProcessed.add(v);
@@ -65,15 +59,13 @@ public class ListBasedGraph<T> {
         return new ArrayList<>();
     }
 
-
-    public List<Vertex<T>> getJoinedVertex(Vertex<T> oneVertex) {
-        return adjVertices.putIfAbsent(oneVertex, new ArrayList<>());
+    private List<Vertex<T>> getJoinedVertex(Vertex<T> oneVertex) {
+        return vertices.putIfAbsent(oneVertex, new ArrayList<>());
     }
 
     private void checkInputArgument(Vertex<T> input) throws IllegalGraphArgumentException {
-
-        if (adjVertices.get(input).isEmpty()) {
+        if (input == null || vertices.get(input).isEmpty())
             throw new IllegalGraphArgumentException();
-        }
     }
 }
+

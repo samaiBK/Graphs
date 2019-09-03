@@ -1,6 +1,5 @@
 package my.homework.graphs.api;
 
-import my.homework.graphs.Edge;
 import my.homework.graphs.Vertex;
 
 import java.util.List;
@@ -8,11 +7,11 @@ import java.util.List;
 public interface Graph<T> {
 
 
-    void addVertex(Vertex vertex);
+    abstract void addVertex(Vertex<T> v);
 
-    void addEdge(Vertex v1, Vertex v2);
+    void addEdge(Vertex<T> v1, Vertex<T> v2);
 
-    List getPath(Vertex oneVertex, Vertex nextOneVertex);
+    List<Vertex<T>> getPath(Vertex<T> oneVertex, Vertex<T> nextOneVertex);
 
 }
 

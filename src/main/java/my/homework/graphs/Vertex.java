@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Vertex<T> {
     private T value;
 
-    Vertex(T val) {
+    public Vertex(T val) {
         value = val;
     }
 
